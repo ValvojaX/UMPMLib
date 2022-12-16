@@ -65,7 +65,8 @@ bool SFGetMemoryInfo(SFMemoryInfo* pInfo, int& rCount)
 	SUPERFETCH_INFORMATION SuperfetchInfo;
 	ULONG ResultLength = 0;
 	PF_MEMORY_RANGE_INFO MemoryRangeInfo;
-	MemoryRangeInfo.Version = 1;
+	MemoryRangeInfo.Version = 2;
+	MemoryRangeInfo.Flags = 0;
 	SFBuildInfo(&SuperfetchInfo, &MemoryRangeInfo, sizeof(MemoryRangeInfo), SuperfetchMemoryRangesQuery);
 
 	if (
@@ -73,7 +74,8 @@ bool SFGetMemoryInfo(SFMemoryInfo* pInfo, int& rCount)
 		== STATUS_BUFFER_TOO_SMALL) 
 	{
 		MemoryRanges = static_cast<PPF_MEMORY_RANGE_INFO>(HeapAlloc(GetProcessHeap(), 0, ResultLength));
-		MemoryRanges->Version = 1;
+		MemoryRanges->Version = 2;
+		MemoryRanges->Flags = 0;
 		SFBuildInfo(&SuperfetchInfo, MemoryRanges, ResultLength, SuperfetchMemoryRangesQuery);
 		if (!NT_SUCCESS(NtQuerySystemInformation(SystemSuperfetchInformation, &SuperfetchInfo, sizeof(SuperfetchInfo), &ResultLength)))
 			return false;
