@@ -63,22 +63,18 @@ public:
 		SFSetup();	
 		SFGetMemoryInfo(mMemInfo, mInfoCount);
 
-		mPMemHandle = OpenPhysicalMemory();
-
-
-			//mMemInfo[i].Start = 0x1000;
-			//mMemInfo[i].End = 0x1000;
-			//mMemInfo[i].Size = 0x1000;
 		mMemInfo[mInfoCount - 1].End -= 0x1000;
 		mMemInfo[mInfoCount - 1].Size -= 0x1000;
 		uint8_t* startScan = 0;
-		if (!MapPhysicalMemory(mPMemHandle, (PDWORD64)&startScan, &mMemInfo[mInfoCount - 1].End, (PDWORD64)&ramImage))
-			printf("Mapping failed...\n");
+		
+		// TODO: Map physical memory into ramImage from 0 (startScan) to end of last page (mMemInfo[mInfoCount - 1].End)
+		
 	}
 
 	~PMemHelper()
 	{
-		UnmapPhysicalMemory((PDWORD64)ramImage);
+		// TODO: Unmap physical memory
+	
 	}
 
 	bool Read(uint64_t address, uint8_t* buffer, int size)

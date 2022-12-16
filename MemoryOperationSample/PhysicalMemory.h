@@ -93,7 +93,3 @@ typedef struct _OBJECT_HEADER
 } OBJECT_HEADER, *POBJECT_HEADER;
 
 int isPrintable(uint32_t uint32);
-
-HANDLE OpenPhysicalMemory();
-BOOLEAN MapPhysicalMemory(HANDLE PhysicalMemory, PDWORD64 Address, PSIZE_T Length, PDWORD64 VirtualAddress);
-BOOLEAN UnmapPhysicalMemory(PDWORD64 Address);
