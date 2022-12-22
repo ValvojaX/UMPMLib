@@ -4,7 +4,7 @@
 
 #pragma comment(lib,"Version.lib")
 
-enum Windows {
+extern enum Windows {
 	WINDOWS7,
 	WINDOWS8,
 	WINDOWS81,
@@ -12,7 +12,7 @@ enum Windows {
 	UNSUPPORTED
 };
 
-Windows getVersion() {
+inline Windows getVersion() {
 	static const wchar_t kernel32[] = L"\\kernel32.dll";
 	wchar_t *path = NULL;
 	void *ver = NULL, *block;

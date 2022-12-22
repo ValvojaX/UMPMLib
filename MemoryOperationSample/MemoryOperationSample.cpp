@@ -1,9 +1,9 @@
 #include <Windows.h>
-#include "PMemHelper.h"
+#include "PMemHelperEx.h"
 
 void main()
 {
-	PMemHelper *mem = new PMemHelper();
+	PMemHelperEx *mem = new PMemHelperEx();
 	uint8_t buffer[255];
 	auto cr3 = mem->GetDirBase(GetCurrentProcessId()); // Put the PID of the process you want to read
 	auto base = mem->GetProcessBase(GetCurrentProcessId()); // Put the PID of the process you want to read

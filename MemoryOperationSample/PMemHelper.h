@@ -12,14 +12,12 @@ class PMemHelper
 public:
 	PMemHelper()
 	{
-
 		// get system version
 
 		// win7
 		auto windowsVersion = getVersion();
 		switch(windowsVersion) {
 		case WINDOWS7:
-			printf("Windows 7 detected!\n");
 			EPNameOffset = 0x2D8;
 			EPPidOffset = 0x180;
 			EPDirBaseOffset = 0x0028;
@@ -27,7 +25,6 @@ public:
 			EPLinkOffset = 0x188;
 			break;
 		case WINDOWS8:
-			printf("Windows 8 detected - Untested, if this bugs, please report on github!\n");
 			EPNameOffset = 0x438;
 			EPPidOffset = 0x2E0;
 			EPDirBaseOffset = 0x0028;
@@ -35,7 +32,6 @@ public:
 			EPLinkOffset = 0x2E8;
 			break;
 		case WINDOWS81:
-			printf("Windows 8.1 detected - Untested, if this bugs, please report on github!\n");
 			EPNameOffset = 0x438;
 			EPPidOffset = 0x2E0;
 			EPDirBaseOffset = 0x0028;
@@ -44,7 +40,6 @@ public:
 			break;
 		// win10 1703
 		case WINDOWS10:
-			printf("Windows 10 detected!\n");
 			EPNameOffset = 0x450;
 			EPPidOffset = 0x02E0;
 			EPDirBaseOffset = 0x0028;
@@ -52,7 +47,6 @@ public:
 			EPLinkOffset = 0x02E8;
 			break;
 		default:
-			printf("Unsupported OS detected, this probably won't work!\n");
 			EPNameOffset = 0x450;
 			EPPidOffset = 0x02E0;
 			EPDirBaseOffset = 0x0028;
@@ -65,16 +59,11 @@ public:
 
 		mMemInfo[mInfoCount - 1].End -= 0x1000;
 		mMemInfo[mInfoCount - 1].Size -= 0x1000;
-		uint8_t* startScan = 0;
-		
-		// TODO: Map physical memory into ramImage from 0 (startScan) to end of last page (mMemInfo[mInfoCount - 1].End)
-		
 	}
 
 	~PMemHelper()
 	{
-		// TODO: Unmap physical memory
-	
+
 	}
 
 	bool Read(uint64_t address, uint8_t* buffer, int size)
@@ -154,7 +143,6 @@ public:
 				if (!Read(peprocess + EPDirBaseOffset, (uint8_t*)&mKernelDir, sizeof(mKernelDir)))
 					return false;
 				if (peprocess == TranslateLinearAddress(mKernelDir, SFGetEProcess(4))) {
-					printf("Found System CR3\n");
 					return true;		
 				}
 			}
@@ -166,7 +154,7 @@ public:
 		return 0;
 	}
 
-private:
+protected:
 	uint64_t EPNameOffset    = 0;
 	uint64_t EPPidOffset     = 0;
 	uint64_t EPDirBaseOffset = 0;
@@ -187,7 +175,7 @@ private:
 		return false;
 	}
 
-	bool ScanPoolTag(char* tag_char, std::function<bool(uint64_t)> scan_callback)
+	bool ScanPoolTag(const char* tag_char, std::function<bool(uint64_t)> scan_callback)
 	{
 		uint32_t tag = (
 			tag_char[0] |

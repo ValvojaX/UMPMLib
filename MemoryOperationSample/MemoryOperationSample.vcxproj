@@ -145,12 +145,14 @@
   <ItemGroup>
     <ClCompile Include="MemoryOperationSample.cpp" />
     <ClCompile Include="PhysicalMemory.cpp" />
+    <ClCompile Include="PMemHelperEx.cpp" />
     <ClCompile Include="Superfetch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GetWindowsVersion.h" />
     <ClInclude Include="PhysicalMemory.h" />
     <ClInclude Include="PMemHelper.h" />
+    <ClInclude Include="PMemHelperEx.h" />
     <ClInclude Include="Superfetch.h" />
     <ClInclude Include="SuperfetchNative.h" />
   </ItemGroup>
