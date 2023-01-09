@@ -13,6 +13,7 @@ struct SFMemoryInfo
 bool     SFSetup();
 bool	 SFGetMemoryInfo(SFMemoryInfo* pInfo, int& rCount);
 uint64_t SFGetModuleBase(char* module);
+uint64_t SFGetModuleExport(const char* module, const char* export_name);
 uint64_t SFGetNtBase();
 uint64_t SFGetWin32kBase();
 uint64_t SFGetHalBase();

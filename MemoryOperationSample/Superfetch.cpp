@@ -2,6 +2,7 @@
 #include "SuperfetchNative.h"
 #include <Windows.h>
 #include <memory>
+#include <string>
 
 template<typename SYS_TYPE>
 std::unique_ptr<SYS_TYPE>
@@ -123,6 +124,30 @@ uint64_t SFGetModuleBase(char* module)
 	for (size_t i = 0; i < module_info->NumberOfModules; i++)
 		if (!_strnicmp(module, module_info.get()->Modules[i].FullPathName + module_info->Modules[i].OffsetToFileName, strlen(module)+1))
 			return reinterpret_cast<size_t>(module_info->Modules[i].ImageBase);
+
+	return 0;
+}
+
+uint64_t SFGetModuleExport(const char* module, const char* export_name)
+{
+	auto module_info = QueryInfo<RTL_PROCESS_MODULES>(SystemModuleInformation);
+
+	for (size_t i = 0; i < module_info->NumberOfModules; i++) {
+		if (!_strnicmp(module, module_info.get()->Modules[i].FullPathName + module_info->Modules[i].OffsetToFileName, strlen(module) + 1)) {
+
+			char env_buf[MAX_PATH];
+			GetEnvironmentVariableA("SYSTEMROOT", env_buf, sizeof(env_buf));
+
+			std::string full_path = std::string(module_info->Modules[i].FullPathName);
+			std::string system_root = std::string(env_buf);
+			full_path.replace(full_path.find("\\SystemRoot\\"), strlen("\\SystemRoot\\") - 1, system_root);
+
+			HMODULE hModule = LoadLibraryExA(full_path.c_str(), NULL, NULL);
+			uint64_t fn_address = (uint64_t)GetProcAddress(hModule, export_name);
+
+			return (uint64_t)module_info->Modules[i].ImageBase + (fn_address - (uint64_t)hModule);
+		}
+	}
 
 	return 0;
 }
